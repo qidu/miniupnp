@@ -1,5 +1,11 @@
  -= MiniUPnP project =-
 
+```shell
+# for android
+sudo apt-get install gcc-aarch64-linux-gnu
+dpkg -L gcc-aarch64-linux-gnu
+```
+
 Main author : Thomas BERNARD
 
 Web site : http://miniupnp.free.fr/ or https://miniupnp.tuxfamily.org/

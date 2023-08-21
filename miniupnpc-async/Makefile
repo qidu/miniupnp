@@ -10,7 +10,7 @@
 # make install (will go to /usr/bin, /usr/lib, etc...)
 OS = $(shell $(CC) -dumpmachine)
 
-CC ?= gcc
+CC = aarch64-linux-gnu-gcc
 #AR = gar
 CFLAGS = -O0 -g -DDEBUG
 #CFLAGS = -O
@@ -62,7 +62,7 @@ INSTALLDIRBIN = $(INSTALLPREFIX)/bin
 all:	$(LIBRARY) $(EXECUTABLES)
 
 check:
-	@echo "To be implemented"
+	@echo "To be implemented" $(CC)
 
 pythonmodule:	$(LIBRARY) miniupnpcmodule.c setup.py
 	python setup.py build

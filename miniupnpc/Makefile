@@ -32,7 +32,8 @@ INCDIR = include
 SRCDIR = src
 BUILD = build
 
-CC ?= gcc
+#CC ?= gcc
+CC = aarch64-linux-gnu-gcc
 #AR = gar
 #CFLAGS = -O -g
 # to debug :
