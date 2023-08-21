@@ -65,6 +65,10 @@ You need to download xnu sources : https://opensource.apple.com/tarballs/xnu/
 > INCLUDES="-I.../xnu/bsd -I.../xnu/libkern" make
 
 ============================ Linux/netfilter ==============================
+```shell
+  sudo apt-get install libmnl-dev
+  sudo apt-get install libnftnl-dev
+```
 To Build and install :
 
 - make sure you have libiptc available on your system :
