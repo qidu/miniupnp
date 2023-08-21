@@ -119,7 +119,7 @@ else
 endif
 endif
 
-EXECUTABLES = $(addprefix $(BUILD)/, upnpc-static upnp-listdevices-static)
+EXECUTABLES = $(addprefix $(BUILD)/, upnpc-static upnp-listdevices-static upnp_mapping)
 EXECUTABLES_ADDTESTS = $(addprefix $(BUILD)/, testminixml minixmlvalid \
     testupnpreplyparse testigddescparse testminiwget testportlistingparse)
 
@@ -326,6 +326,9 @@ $(DEPS):	$(BUILDINCLUDES)
 $(BUILD)/%.d:	$(SRCDIR)/%.c
 	@$(MKDIR) $(@D)
 	$(CC) $(CPPFLAGS) $(DEPFLAGS) -MT $@ -o $@ $<
+
+$(BUILD)/upnp_mapping:	$(BUILD)/upnp_mapping.o $(LIBRARY)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LOADLIBES) $(LDLIBS)
 
 $(BUILD)/upnpc-static:	$(BUILD)/upnpc.o $(LIBRARY)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LOADLIBES) $(LDLIBS)
