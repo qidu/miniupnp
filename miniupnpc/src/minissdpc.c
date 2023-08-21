@@ -505,6 +505,31 @@ static int upnp_gettimeofday(struct timeval * tv)
 #define UPNP_MCAST_LL_ADDR "FF02::C" /* link-local */
 #define UPNP_MCAST_SL_ADDR "FF05::C" /* site-local */
 
+
+ssize_t my_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen) {
+    struct iovec iov[1];
+    struct msghdr msg;
+
+    // 准备数据
+    iov[0].iov_base = (void *)buf;
+    iov[0].iov_len = len;
+
+    memset(&msg, 0, sizeof(msg));
+    msg.msg_name = (struct sockaddr *)dest_addr;
+    msg.msg_namelen = addrlen;
+    msg.msg_iov = iov;
+    msg.msg_iovlen = 1;
+
+    // 发送消息
+    ssize_t bytes_sent = sendmsg(sockfd, &msg, flags);
+    if (bytes_sent == -1) {
+        perror("sendmsg");
+        exit(EXIT_FAILURE);
+    }
+
+    return bytes_sent;
+}
+
 /* direct discovery if minissdpd responses are not sufficient */
 /* ssdpDiscoverDevices() :
  * return a chained list of all devices found or NULL if
@@ -871,7 +896,7 @@ ssdpDiscoverDevices(const char * const deviceTypes[],
 			p->sin_port = htons(SSDP_PORT);
 			p->sin_addr.s_addr = inet_addr(UPNP_MCAST_ADDR);
 		}
-		n = sendto(sudp, bufr, n, 0, &sockudp_w,
+		n = my_sendto(sudp, bufr, n, 0, &sockudp_w,
 		           ipv6 ? sizeof(struct sockaddr_in6) : sizeof(struct sockaddr_in));
 		if (n < 0) {
 			if(error)
@@ -900,7 +925,7 @@ ssdpDiscoverDevices(const char * const deviceTypes[],
 		} else {
 			struct addrinfo *p;
 			for(p = servinfo; p; p = p->ai_next) {
-				n = sendto(sudp, bufr, n, 0, p->ai_addr, MSC_CAST_INT p->ai_addrlen);
+				n = my_sendto(sudp, bufr, n, 0, p->ai_addr, MSC_CAST_INT p->ai_addrlen);
 				if (n < 0) {
 #ifdef DEBUG
 					char hbuf[NI_MAXHOST], sbuf[NI_MAXSERV];
